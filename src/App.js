@@ -1,29 +1,18 @@
-import { useState, useEffect } from "react";
+import WavesurferPlayerBar from "./WavesurferPlayerbar.js";
+import { useState, useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
+import tracks from "./musicTracks.json";
+import Player from "./Player";
 
 const App = () => {
-  const tracks = [
-    {
-      title: "Song One",
-      url: "https://johnbartmann.com/track/overdose-sample.mp3",
-    },
-    {
-      title: "Song Two",
-      url: "https://johnbartmann.com/track/cybernetic-boss-battle-sample.mp3",
-    },
-    {
-      title: "Song Three",
-      url: "https://johnbartmann.com/track/a-crime-in-progress-sample.mp3",
-    },
-  ];
-
   const [currentTrack, setCurrentTrack] = useState(tracks[0]);
-
   const titleLogo = document.querySelector("#title-logo");
 
   const scrollHandler = (e) => {
     console.log(e);
   };
+
+  const wavesurferObjRef = useRef(null);
 
   useEffect(() => {
     console.log("action");
@@ -59,7 +48,11 @@ const App = () => {
             <div className="player-container min-h-screen text-white flex flex-col items-center p-6 bg-cream">
               {/* Audio Player */}
               <div className="mt-8 w-full max-w-2xl ">
-                <ReactPlayer
+                <div ref={wavesurferObjRef}>
+                  <WavesurferPlayerBar wavesurferObjRef={wavesurferObjRef} />
+                </div>
+
+                {/* <ReactPlayer
                   url={currentTrack.url}
                   playing
                   controls
@@ -69,7 +62,7 @@ const App = () => {
                 />
                 <p className="text-center mt-2 text-orange-700">
                   <strong>NOW PLAYING: {currentTrack.title}</strong>
-                </p>
+                </p> */}
               </div>
 
               {/* Track List */}
@@ -79,9 +72,11 @@ const App = () => {
                 </h2>
                 <ul className="space-y-2 flex flex-col items-center">
                   {tracks.map((track, index) => (
-                    <div className="flex flex-col justify-center w-1/3 right-0">
+                    <div
+                      className="flex flex-col justify-center w-1/3 right-0"
+                      key={index}
+                    >
                       <li
-                        key={index}
                         onClick={() => setCurrentTrack(track)}
                         className={`cursor-pointer p-3 rounded-lg ${
                           currentTrack.title === track.title
